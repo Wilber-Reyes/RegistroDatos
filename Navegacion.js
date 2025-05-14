@@ -11,7 +11,7 @@ export default function Navegacion() {
 
   function StackMenu() {
     return (
-      <Stack.Navigator initialRouteName="GuardarCliente">
+      <Stack.Navigator initialRouteName="ListaCliente">
         <Stack.Screen name="GuardarCliente" component={GuardarCliente} />
         <Stack.Screen name="ListaCliente" component={ListarClientes} />
       </Stack.Navigator>

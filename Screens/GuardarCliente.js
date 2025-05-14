@@ -1,19 +1,20 @@
-import { StyleSheet, View, Text, Alert, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { FontAwesome } from '@expo/vector-icons';
 
-export default function GuardarCliente({ navigation }) {
+export default function GuardarCliente({ route, navigation }) {
+    const { guardarNuevo } = route.params;
+
     const [cedula, setCedula] = useState("");
     const [nombre, setNombres] = useState("");
     const [apellidos, setApellidos] = useState("");
     const [fechaNacimiento, setFechaNacimiento] = useState("");
     const [sexo, setSexo] = useState("");
-    const [clientes, setClientes] = useState([]);
 
     const formatCedula = (text) => {
         let cleaned = text.replace(/[^0-9A-Za-z]/g, "");
-        if (cleaned.length > 14) return text;
+        if (cleaned.length > 14) return text;  
         if (cleaned.length > 3 && cleaned[3] !== "-") {
             cleaned = cleaned.slice(0, 3) + "-" + cleaned.slice(3);
         }
@@ -25,7 +26,7 @@ export default function GuardarCliente({ navigation }) {
 
     const formatFecha = (text) => {
         let cleaned = text.replace(/[^0-9-]/g, "");
-        cleaned = cleaned.replace(/-{2,}/g, "-");
+        cleaned = cleaned.replace(/-{2,}/g, "-");  
         if (cleaned.length > 4 && cleaned[4] !== "-") {
             cleaned = cleaned.slice(0, 4) + "-" + cleaned.slice(4);
         }
@@ -39,16 +40,15 @@ export default function GuardarCliente({ navigation }) {
         if (!cedula || !nombre) return;
 
         const nuevoCliente = {
-            cedula: cedula,
-            nombres: nombre,
-            apellidos: apellidos,
-            fechaNac: fechaNacimiento,
-            sexo: sexo,
+            nuevaCedula: cedula,
+            nuevoNombre: nombre,
+            nuevosApellidos: apellidos,
+            nuevaFecha: fechaNacimiento,
+            nuevoSexo: sexo,
         };
-
-        setClientes([nuevoCliente, ...clientes]);
-        Alert.alert('Éxito', 'Se guardó con éxito');
-
+        
+        guardarNuevo(nuevoCliente);
+        navigation.goBack();
         setCedula('');
         setNombres('');
         setApellidos('');
@@ -99,31 +99,20 @@ export default function GuardarCliente({ navigation }) {
 
                     <Text style={styles.lebel}>Sexo:</Text>
                     <View style={styles.picker}>
-                        <Picker
-                            selectedValue={sexo}
-                            onValueChange={(itemValue) => setSexo(itemValue)}
-                        >
-                            <Picker.Item label="Seleccione..." value="" style={styles.itemS} />
-                            <Picker.Item label="Masculino" value="Masculino" style={styles.itemS} />
-                            <Picker.Item label="Femenino" value="Femenino" style={styles.itemS} />
+                        <Picker selectedValue={sexo} onValueChange={(itemValue) => setSexo(itemValue)}>
+                            <Picker.Item label="Seleccione..." value="" />
+                            <Picker.Item label="Masculino" value="Masculino" />
+                            <Picker.Item label="Femenino" value="Femenino" />
                         </Picker>
                     </View>
                 </View>
 
                 <View style={styles.contBoton}>
                     <TouchableOpacity style={styles.button} onPress={guardar}>
-                        <FontAwesome6 name="pen-clip" size={23} color="#0D0D0D" style={styles.pen} />
+                        <FontAwesome name="save" size={23} color="#0D0D0D" style={styles.pen} />
                         <Text style={styles.buttonText}>Guardar</Text>
                     </TouchableOpacity>
                 </View>
-
-                <View style={styles.contBoton}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ListaCliente", { clientes })}>
-                        <FontAwesome6 name="clipboard-list" size={23} color="#0D0D0D" style={styles.pen} />
-                        <Text style={styles.buttonText}>Lista</Text>
-                    </TouchableOpacity>
-                </View>
-
             </View>
         </ScrollView>
     );
@@ -188,10 +177,5 @@ const styles = StyleSheet.create({
         borderColor: "#038C7F",
         borderWidth: 1,
         justifyContent: 'center',
-    },
-    itemS: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: "#0D0D0D",
     }
 });
