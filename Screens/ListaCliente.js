@@ -6,20 +6,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 export default function ListarClientes({ route, navigation }) {
     
     const [clientes, setClientes] = useState([
-        {
-            nuevaCedula: "cedula",
-            nuevoNombre: "nombre",
-            nuevosApellidos: "apellidos",
-            nuevaFecha: "fechaNacimiento",
-            nuevoSexo: "sexo",
-        },
-        {
-            nuevaCedula: "cedula",
-            nuevoNombre: "nombre",
-            nuevosApellidos: "apellidos",
-            nuevaFecha: "fechaNacimiento",
-            nuevoSexo: "sexo",
-        },
     ]);
 
     const guardarNuevo = (nuevo) => {
@@ -47,7 +33,7 @@ export default function ListarClientes({ route, navigation }) {
                         <View key={index} style={styles.card}>
                             <View style={styles.ElimBoton}>
                                 <TouchableOpacity onPress={() => eliminarCliente(index)}>
-                                    <MaterialIcons name="delete" size={24} color="#0D0D0D" />
+                                    <MaterialIcons name="delete" size={35} color="#0D0D0D" />
                                 </TouchableOpacity>
                             </View>
                             <Text style={styles.label}>Cédula:</Text><Text style={styles.valor}>{cliente.nuevaCedula}</Text>
